@@ -33,9 +33,31 @@ function querySql(sql) {
     }
 
   })
+}
+
+function queryOne(sql) {
+  const conn = connect()
+  debug && console.log(sql)
+  return new Promise((res, rej) => {
+    try {
+      conn.query(sql, (err, results) => {
+        if(results && results.length > 0) {
+          res(results[0])
+        } else {
+          rej(null)
+        }
+      })
+    } catch (e) {
+      rej(e)
+    } finally {
+      conn.end()
+    }
+
+  })
 
 }
 
 module.exports = {
-  querySql
+  querySql,
+  queryOne
 }
